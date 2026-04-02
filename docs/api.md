@@ -16,6 +16,7 @@ TruePresence exposes a compact set of backend contracts that map directly to the
   - delete a teacher-added student
 - `POST /v1/demo/control/enroll-from-mac`
   - enroll a student from a Mac camera capture or fallback upload
+  - used by both guided camera capture and single-photo upload
 - `POST /v1/demo/control/people/{person_id}/binding-token`
   - create a short-lived QR binding token for one student
 - `POST /v1/demo/control/class-session/start`
@@ -60,3 +61,4 @@ That principle is what keeps the product easy to audit and easy to extend.
 - The route prefix still uses `/v1/demo/control/...` for compatibility with the current codebase.
 - The public semantics are classroom-oriented even where the internal type names stay generic.
 - Teams can layer additional policy checks on top of the existing contracts without changing the operator flow.
+- The shipped mobile reference app uses Vision face detection, a bundled `ArcFaceMobileFace.mlmodelc` Core ML embedder, and TrueDepth-assisted liveness before claim submission.

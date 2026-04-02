@@ -91,6 +91,38 @@ This public repository contains a complete, reusable **reference deployment**:
 
 This release intentionally excludes local runtime artifacts, personal captures, internal task memory, and company-specific branding.
 
+## Models and Verification Pipeline
+
+This repo now explains the biometrics path explicitly, because public users need to know what is actually running:
+
+- **Teacher-side enrollment**
+  - the authority console supports `Mac camera` enrollment as the primary path
+  - it also supports a `single-photo upload fallback` for rapid setup or recovery
+  - the backend endpoint for both paths is `POST /v1/demo/control/enroll-from-mac`
+- **Mobile-side live verification**
+  - the iPhone app uses Apple's **Vision** face detection (`VNDetectFaceRectanglesRequest`)
+  - it uses a bundled Core ML face embedder, **`ArcFaceMobileFace.mlmodelc`**, for on-device face representation
+  - it uses front **TrueDepth** depth evidence and liveness gating before claim submission
+- **Template protection and matching**
+  - the repo stores **protected templates**, not raw face embeddings, in its default public-safe flow
+  - the current protected-template scheme in the shipped app is `signed-random-projection-v1`
+  - the backend combines match score, quality, liveness, LAN reachability, and geofence policy into one canonical decision
+
+In plain terms, the flow is:
+
+1. the authority side captures or uploads a reference face
+2. the backend creates protected templates for that identity
+3. the iPhone captures a live face with TrueDepth
+4. the iPhone extracts a protected claim representation on-device
+5. the backend compares that live claim against the enrolled templates and applies policy checks
+
+This section is useful for builders because it tells them exactly where to swap components:
+
+- replace the enrollment path if they want a different operator workflow
+- replace the Core ML embedder if they need a different model family
+- replace the template protection scheme if they need a stronger or regulated deployment posture
+- keep the same authority/mobile split if they want the same operational trust model
+
 ## Reference Workflow
 
 ```mermaid
