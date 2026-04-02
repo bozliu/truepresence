@@ -1,0 +1,14 @@
+.git
+.github
+.pytest_cache
+.venv
+__pycache__
+legacy
+output
+*.pyc
+*.pyo
+*.pyd
+*.DS_Store
+apps/ios
+apps/laptop-demo
+apps/admin

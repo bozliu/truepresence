@@ -1,0 +1,25 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend-and-release-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: dl
+          environment-file: environment.yml
+          auto-activate-base: false
+
+      - name: Run public release audit
+        shell: bash -el {0}
+        run: python scripts/public_release_audit.py
+
+      - name: Run backend tests
+        shell: bash -el {0}
+        run: pytest apps/api/tests/test_api.py

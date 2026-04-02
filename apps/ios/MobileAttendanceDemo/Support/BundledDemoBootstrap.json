@@ -1,0 +1,105 @@
+{
+  "tenant": {
+    "id": "truepresence-demo",
+    "name": "TruePresence Demo Tenant",
+    "timezone": "Asia/Shanghai"
+  },
+  "policy": {
+    "thresholds": {
+      "min_quality_score": 0.35,
+      "min_liveness_score": 0.76,
+      "min_match_score": 0.80,
+      "review_match_floor": 0.74
+    },
+    "attendance_window": {
+      "start_hour_local": 6,
+      "end_hour_local": 22
+    },
+    "require_device_attestation": true,
+    "allow_1_n_fallback": true,
+    "step_up_triggers": [
+      "low_liveness",
+      "low_quality",
+      "marginal_match",
+      "untrusted_device",
+      "outside_window"
+    ]
+  },
+  "people": [
+    {
+      "id": "student-one",
+      "tenant_id": "truepresence-demo",
+      "employee_code": "E1001",
+      "display_name": "Student One",
+      "site_ids": ["classroom-a"],
+      "active": true
+    },
+    {
+      "id": "student-two",
+      "tenant_id": "truepresence-demo",
+      "employee_code": "E1002",
+      "display_name": "Student Two",
+      "site_ids": ["classroom-b"],
+      "active": true
+    }
+  ],
+  "sites": [
+    {
+      "id": "classroom-a",
+      "tenant_id": "truepresence-demo",
+      "label": "Classroom A",
+      "latitude": 31.2304,
+      "longitude": 121.4737,
+      "radius_m": 250.0
+    },
+    {
+      "id": "classroom-b",
+      "tenant_id": "truepresence-demo",
+      "label": "Classroom B",
+      "latitude": 22.5431,
+      "longitude": 114.0579,
+      "radius_m": 200.0
+    }
+  ],
+  "server_time": "2026-03-30T00:00:00Z",
+  "method_stack": {
+    "profile_id": "mobile-attendance-2026-03-28",
+    "effective_date": "2026-03-28",
+    "summary": "Bundled standalone demo bootstrap for the iPhone mobile attendance walkthrough.",
+    "components": [
+      {
+        "role": "detector",
+        "name": "SCRFD-class detector and aligner",
+        "status": "production_baseline",
+        "selected_on": "2026-03-28",
+        "paper_date": null,
+        "rationale": "Edge/mobile detector baseline used across the mobile attendance blueprint.",
+        "source_url": "https://github.com/deepinsight/insightface"
+      },
+      {
+        "role": "embedder",
+        "name": "FaceLiVT",
+        "status": "latest_candidate",
+        "selected_on": "2026-03-28",
+        "paper_date": "2025-06-12",
+        "rationale": "Mobile-oriented recognition direction retained by the repo for 2026.",
+        "source_url": "https://arxiv.org/abs/2506.10361"
+      },
+      {
+        "role": "liveness",
+        "name": "Intermediate-Feature ViT-PAD",
+        "status": "latest_candidate",
+        "selected_on": "2026-03-28",
+        "paper_date": "2025-05-30",
+        "rationale": "Passive liveness direction for front-camera mobile capture.",
+        "source_url": "https://arxiv.org/abs/2505.24402"
+      }
+    ]
+  },
+  "capture_profile": {
+    "profile_id": "public-prod-safe-mobile-2026-03-28",
+    "label": "Public Release Mobile Capture",
+    "commercial_release_safe": true,
+    "summary": "Bundled bootstrap data mirrors the public mobile capture profile when no teacher backend is reachable."
+  }
+}

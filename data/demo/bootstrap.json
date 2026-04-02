@@ -1,0 +1,44 @@
+{
+  "tenants": [
+    {
+      "id": "truepresence-demo",
+      "name": "TruePresence Demo Tenant",
+      "timezone": "Asia/Shanghai",
+      "api_secret": "demo-secret-truepresence-2026"
+    }
+  ],
+  "sites": [
+    {
+      "id": "classroom-a",
+      "tenant_id": "truepresence-demo",
+      "label": "Classroom A",
+      "latitude": 31.2304,
+      "longitude": 121.4737,
+      "radius_m": 250.0
+    },
+    {
+      "id": "classroom-b",
+      "tenant_id": "truepresence-demo",
+      "label": "Classroom B",
+      "latitude": 22.5431,
+      "longitude": 114.0579,
+      "radius_m": 200.0
+    }
+  ],
+  "people": [
+    {
+      "id": "student-one",
+      "tenant_id": "truepresence-demo",
+      "employee_code": "E1001",
+      "display_name": "Student One",
+      "site_ids": ["classroom-a"]
+    },
+    {
+      "id": "student-two",
+      "tenant_id": "truepresence-demo",
+      "employee_code": "E1002",
+      "display_name": "Student Two",
+      "site_ids": ["classroom-b"]
+    }
+  ]
+}

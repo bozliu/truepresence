@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TruePresence Teacher Console</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="backdrop"></div>
+    <div class="shell">
+      <aside class="rail">
+        <p class="eyebrow">Teacher Console</p>
+        <h1>TruePresence classroom control</h1>
+        <p class="intro">
+          One local system: add a student, create the active class session, enroll a face from the
+          Mac camera or upload, generate the binding QR, and watch the same attendance decision
+          appear here and on the iPhone in realtime.
+        </p>
+
+        <div class="api-box">
+          <label for="apiBase">API base</label>
+          <input id="apiBase" type="text" value="http://127.0.0.1:8000" />
+          <div class="button-row">
+            <button id="connectButton" type="button">Connect Console</button>
+            <button id="refreshButton" type="button" class="ghost">Refresh Snapshot</button>
+          </div>
+        </div>
+
+        <div class="rail-status">
+          <div>
+            <span class="eyebrow">Transport</span>
+            <strong id="transportStatus">Waiting for backend</strong>
+          </div>
+          <div>
+            <span class="eyebrow">Session Feed</span>
+            <strong id="streamStatus">disconnected</strong>
+          </div>
+        </div>
+
+        <ul class="rail-list">
+          <li>Mac webcam enrollment and iPhone TrueDepth verification share one backend.</li>
+          <li>Students bind by scanning a short-lived teacher QR code.</li>
+          <li>LAN realtime mode returns accepted or rejected directly. No queue, no review.</li>
+        </ul>
+      </aside>
+
+      <main class="workspace">
+        <section class="hero">
+          <div>
+            <p class="eyebrow">Active Class</p>
+            <h2>Enroll on the Mac. Bind by QR. Verify on the iPhone.</h2>
+          </div>
+          <p class="hero-copy" id="heroCopy">
+            Start with a full reset, add a student, create the active class session for the current
+            classroom location, enroll the face from the Mac camera, generate the student QR, then
+            let the iPhone run TrueDepth liveness and realtime identity verification against this
+            backend.
+          </p>
+        </section>
+
+        <section class="stats" id="stats"></section>
+
+        <section class="grid">
+          <article class="panel" id="tenantsPanel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Tenants</p>
+                <h3>Available backend tenants</h3>
+              </div>
+            </div>
+            <div class="stack" id="tenantsList"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Reset Tools</p>
+                <h3>Clear the local classroom state</h3>
+              </div>
+              <span class="pulse">Clean slate</span>
+            </div>
+            <div class="stack">
+              <p class="panel-copy">
+                Full reset clears attendance events, review tickets, live class state, teacher-added
+                students, temporary sites, templates, bindings, and the old laptop face-registry
+                records.
+              </p>
+              <div class="button-row">
+                <button id="fullResetButton" type="button" class="danger">Full Reset</button>
+                <button id="clearEventsButton" type="button" class="ghost">Clear Backend Events</button>
+              </div>
+              <pre class="log-box" id="resetLog">No reset has been run yet.</pre>
+            </div>
+          </article>
+
+          <article class="panel wide" id="peoplePanel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Students</p>
+                <h3>Add or delete classroom students</h3>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="button-row">
+                <input id="newPersonName" type="text" placeholder="New student name" />
+                <button id="addPersonButton" type="button">Add Student</button>
+              </div>
+              <div class="table-shell" id="peopleList"></div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Active Class Session</p>
+                <h3>Choose the student and classroom location</h3>
+              </div>
+            </div>
+            <div class="stack">
+              <p class="panel-copy">
+                Step 1: add or choose a student above. Step 2: create the active class session for
+                the classroom location here. Step 3: enroll the face from the Mac camera or upload
+                below.
+              </p>
+              <label class="field">
+                <span>Student</span>
+                <select id="sessionPersonID"></select>
+              </label>
+              <label class="field">
+                <span>Class label</span>
+                <input id="classLabel" type="text" value="Today’s Class Attendance" />
+              </label>
+              <div class="field-grid">
+                <label class="field">
+                  <span>Latitude</span>
+                  <input id="latitude" type="number" step="0.000001" value="31.230500" />
+                </label>
+                <label class="field">
+                  <span>Longitude</span>
+                  <input id="longitude" type="number" step="0.000001" value="121.473800" />
+                </label>
+                <label class="field">
+                  <span>Accuracy (m)</span>
+                  <input id="accuracyM" type="number" step="1" value="12" />
+                </label>
+              </div>
+              <button id="sessionStartButton" type="button">Start Class Here</button>
+              <div class="summary-card" id="liveSessionCard">
+                <strong>No active class session yet.</strong>
+                <span>Choose a student and classroom location, then start class here.</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Binding QR</p>
+                <h3>Bind one iPhone to one student</h3>
+              </div>
+            </div>
+            <div class="stack">
+              <p class="panel-copy">
+                Generate a short-lived QR code for the currently selected student. The iPhone scans
+                it once, then this device stays linked to that student.
+              </p>
+              <div class="button-row">
+                <button id="generateQRButton" type="button">Generate Student QR</button>
+              </div>
+              <div class="summary-card" id="bindingQRCard">
+                <strong>No QR generated yet.</strong>
+                <span>Generate a QR code for the selected student after the class session is ready.</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel wide">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Enrollment</p>
+                <h3>Capture or upload the student reference face on the Mac</h3>
+              </div>
+            </div>
+            <div class="enrollment-shell">
+              <div class="stage">
+                <video id="cameraPreview" autoplay playsinline muted></video>
+                <canvas id="captureCanvas" hidden></canvas>
+                <div class="stage-overlay">
+                  <p class="eyebrow">Student enrollment</p>
+                  <strong id="cameraStatus">Camera is idle</strong>
+                  <span id="cameraHint">Open the Mac camera, frame one face, then capture and enroll.</span>
+                </div>
+              </div>
+              <div class="stage-actions">
+                <div class="button-row">
+                  <button id="startCameraButton" type="button">Start Mac Camera</button>
+                  <button id="stopCameraButton" type="button" class="ghost">Stop Camera</button>
+                </div>
+                <div class="summary-card" id="shotGuideCard">
+                  <strong>Guided enrollment shot 1 of 3</strong>
+                  <span>Front face first, then slight left, then slight right.</span>
+                </div>
+                <button id="enrollButton" type="button" class="accent">Capture Guided Shot</button>
+                <label class="upload-box">
+                  <span>Upload single fallback photo</span>
+                  <input id="uploadInput" type="file" accept="image/*" />
+                </label>
+                <button id="uploadEnrollButton" type="button" class="ghost">Upload &amp; Enroll Fallback</button>
+                <div class="summary-card" id="enrollmentCard">
+                  <strong>No enrollment has been captured yet.</strong>
+                  <span>The active class student must exist before Mac enrollment can be stored.</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel" id="templatesPanel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Templates</p>
+                <h3>Shared backend template set</h3>
+              </div>
+            </div>
+            <div class="table-shell" id="templatesList"></div>
+          </article>
+
+          <article class="panel wide" id="capturesPanel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Captures</p>
+                <h3>Enrollment and verification images saved locally</h3>
+                <p class="panel-copy">
+                  Finder path: <code>data/runtime/captures</code>. Every Mac enrollment image and
+                  every iPhone verification preview saved by the backend will appear here.
+                </p>
+              </div>
+            </div>
+            <div class="capture-grid" id="capturesList"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Connected iPhone</p>
+                <h3>Realtime mobile status</h3>
+              </div>
+            </div>
+            <div class="stack" id="iphoneStatus"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Method Stack</p>
+                <h3>Current capture and runtime profile</h3>
+              </div>
+            </div>
+            <div class="stack" id="runtimeCard"></div>
+          </article>
+
+          <article class="panel wide" id="eventsPanel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Realtime Attendance Feed</p>
+                <h3>Same classroom decision appears here and on the iPhone</h3>
+              </div>
+              <span class="pulse">SSE live</span>
+            </div>
+            <div id="events"></div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

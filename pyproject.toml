@@ -1,0 +1,28 @@
+[project]
+name = "truepresence"
+version = "0.1.0"
+description = "Local-first teacher Mac + student iPhone attendance system with LAN, geofence, and TrueDepth verification."
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.135,<1",
+  "uvicorn>=0.41,<1",
+  "pydantic>=2.12,<3",
+]
+
+[project.optional-dependencies]
+dev = [
+  "httpx>=0.28,<1",
+  "pytest>=9,<10",
+]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "apps/api",
+  "packages/biometrics/src",
+]
+testpaths = [
+  "apps/api/tests",
+]
+
+[tool.ruff]
+line-length = 100
