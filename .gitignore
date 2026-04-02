@@ -27,6 +27,7 @@ output/
 *.tmp
 *.mov
 *.mp4
+!docs/assets/app-demo.mp4
 *.heic
 *.sqlite
 *.sqlite3

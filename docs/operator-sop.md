@@ -1,41 +1,59 @@
 # Operator SOP
 
-This SOP is the shortest reliable way to run TruePresence in a real classroom.
+This SOP is the shortest reliable way to run the **current reference deployment** of TruePresence.
 
-## Teacher SOP
+## Authority-Side SOP
 
-1. Open the teacher console.
-2. Add a student.
+1. Open the authority console.
+2. Add a person.
 3. Start the Mac camera and complete guided enrollment.
-4. Confirm the classroom location and start the active class session.
-5. Generate the student QR code.
-6. Watch the realtime attendance feed during check-in.
+4. Confirm the site location and start the live session.
+5. Generate the QR code.
+6. Watch the realtime decision feed during check-in.
 
-## Student SOP
+## Mobile-Side SOP
 
-1. Open the student iPhone app.
+1. Open the iPhone app.
 2. Grant camera, location, and local network permissions.
-3. Scan the teacher QR code.
+3. Scan the authority QR code.
 4. Confirm the readiness status is green:
    - location
-   - classroom LAN
+   - same-LAN reachability
    - face verification
-5. Enter classroom check-in.
+5. Enter the check-in flow.
 6. Complete the TrueDepth verification.
 7. Confirm the success screen or review the rejection reason.
 
-## Classroom Reset SOP
+## Reset SOP
 
-1. Stop or replace the active class session.
+1. Stop or replace the active live session.
 2. Clear events only when the operator explicitly wants a clean slate.
-3. Delete teacher-added students only when they are no longer needed.
+3. Delete authority-added identities only when they are no longer needed.
+
+## Reference Mapping
+
+The shipped product currently maps these roles as:
+
+- authority -> teacher
+- mobile user -> student
+- site -> classroom
+- live session -> active class
+
+## Reuse Mapping
+
+The same SOP can be reused in other commercial settings:
+
+- authority -> supervisor / dispatcher / site lead / manager
+- mobile user -> worker / operator / field rep / attendee
+- site -> field site / store / branch / route checkpoint / facility
+- live session -> shift window / assignment window / visit window
 
 ## Why This SOP Is Reusable
 
-It separates the responsibilities cleanly:
+It separates responsibilities cleanly:
 
-- teacher prepares authority state
-- student proves live presence
-- backend emits one canonical decision
+- the authority side prepares trusted state
+- the mobile side proves live presence
+- the backend emits one canonical decision
 
-That makes it easy to reuse for schools, training centers, labs, or any controlled site-presence workflow.
+That makes it easy to reuse for schools, training centers, field operations, retail site visits, route workflows, labs, or other controlled presence-verification systems.
